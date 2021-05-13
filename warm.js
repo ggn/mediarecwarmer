@@ -14,7 +14,7 @@ const argv = yargs
         type: 'boolean',
     }).option('batch', {
         alias: 'b',
-        description: 'batch size of async functions to control copmute utilisation. default value is 3000',
+        description: 'batch size of async functions to control copmute utilisation. default value is 10',
         type: 'number',
     })
     .help()
@@ -29,7 +29,7 @@ if (!argv.url) {
 const DASH_URI = argv.url.indexOf('.mpd') > 0 ? argv.url : null,
     HLS_URI = argv.url.indexOf('.m3u8') > 0 ? argv.url : null,
     SILENT = argv.logs ? false : true,
-    BATCH_SIZE = argv.batch || 3000;
+    BATCH_SIZE = argv.batch || 10;
 
 if (!DASH_URI && !HLS_URI) {
     return console.error("HLS or DASH URL is mandatory. use -u or --url to specify url with extension .mpd or .m3u8");
