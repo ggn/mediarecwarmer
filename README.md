@@ -2,7 +2,7 @@
 utility to warm Regional Edge Cache in the region
 
 
-command to run utility :
+command to run utility :  
 git clone https://github.com/ggn/mediarecwarmer.git   
 npm install  
 node app.js -u {{YOUR_URL}} -b {{PREFFRED_BATCH_SIZE}} -l {{true or false}}  
