@@ -1,0 +1,17 @@
+{
+    "name": "cf_warmer",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "hls-parser": "^0.10.4",
+        "mpd-parser": "^0.16.0",
+        "node-fetch": "^2.6.1",
+        "yargs": "^17.0.1"
+    }
+}
