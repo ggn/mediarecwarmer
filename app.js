@@ -16,6 +16,10 @@ const argv = yargs
         alias: 'b',
         description: 'batch size of async functions to control copmute utilisation. default value is 10',
         type: 'number',
+    }).option('options', {
+        alias: 'o',
+        description: 'path to JSON file with options like headers',
+        type: 'text',
     })
     .help()
     .alias('help', 'h')
@@ -29,7 +33,9 @@ if (!argv.url) {
 const DASH_URI = argv.url.indexOf('.mpd') > 0 ? argv.url : null,
     HLS_URI = argv.url.indexOf('.m3u8') > 0 ? argv.url : null,
     SILENT = argv.logs ? false : true,
-    BATCH_SIZE = argv.batch || 10;
+    BATCH_SIZE = argv.batch || 10,
+    OPTIONS = argv.options ? require("./" + argv.options) : {};
+debugger;
 
 if (!DASH_URI && !HLS_URI) {
     return console.error("HLS or DASH URL is mandatory. use -u or --url to specify url with extension .mpd or .m3u8");
@@ -56,7 +62,7 @@ var fetch_promise = function (url, type) {
         try {
             if (!SILENT)
                 console.log("Fetching cotent -" + url);
-            var res = await fetch(url);
+            var res = await fetch(url, OPTIONS);
             var response = await res.text();
             if (response && !SILENT)
                 console.log("Fetched cotent -" + url);
@@ -75,11 +81,13 @@ var fetch_promise = function (url, type) {
 var get_dash_urls = async function () {
     var dash_urls = [];
     try {
-        const res = await fetch(manifestUri);
+        const res = await fetch(manifestUri, OPTIONS);
         const manifest = await res.text();
+        debugger;
         var parsedManifest = mpdParser.parse(manifest, {
             manifestUri
         });
+        debugger;
         for (i = 0; i < parsedManifest.playlists.length; i++) {
             var playlist = parsedManifest.playlists[i];
             for (j = 0; j < playlist.segments.length; j++) {
@@ -97,14 +105,14 @@ var get_dash_urls = async function () {
 var get_hls_urls = async function () {
     var hls_urls = [];
     try {
-        const res = await fetch(HLS_URI);
+        const res = await fetch(HLS_URI, OPTIONS);
         const manifest = await res.text();
         const main_manfest = HLS.parse(manifest);
         for (i = 0; i < main_manfest.variants.length; i++) {
             var variant = main_manfest.variants[i];
             var lastIndex = HLS_URI.lastIndexOf('/');
             const var_uri = HLS_URI.substr(0, lastIndex) + '/' + variant.uri;
-            const var_res = await fetch(var_uri);
+            const var_res = await fetch(var_uri, OPTIONS);
             const child_manifest = await var_res.text();
             const sub_manfest = HLS.parse(child_manifest);
             for (j = 0; j < sub_manfest.segments.length; j++) {
@@ -155,7 +163,7 @@ var main = async function () {
     var type = HLS_URI ? "hls" : "dash";
     console.log(`Prewarming ${type}...`)
     var reponse = await prewarm_urls(type);
-    console.log(`Prewarming ${type} Completed Successfully!!!`)
+    console.log(`Prewarming ${type} Completed !!!`)
     publish_result();
 }
 main();
