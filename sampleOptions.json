@@ -1,0 +1,5 @@
+{
+    "headers": {
+        "x-custom-session-id": "some random key"
+    }
+}
