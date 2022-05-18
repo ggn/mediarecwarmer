@@ -6,12 +6,12 @@ command to run utility :
 git clone https://github.com/ggn/mediarecwarmer.git   
 cd mediarecwarmer  
 npm install  
-node app.js -u {{YOUR_URL}} -b {{PREFFRED_BATCH_SIZE}} -l {{true or false}}  
+node app.js -u {{YOUR_URL}} -b {{PREFFRED_BATCH_SIZE}} -l {{true or false}} -o {{JSON_FILE_PATH}}      
 
 -u is mandatory.   
 -b is optional, default 10.   
 -l is optional, default false.      
--0 is optional, default is null.       
+-o is optional, default is null.       
 -h help, run this for detailed explanation of each parameter.
 
 Sample Command for reference:        
