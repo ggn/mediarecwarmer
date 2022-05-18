@@ -110,14 +110,16 @@ var get_hls_urls = async function () {
         const main_manfest = HLS.parse(manifest);
         for (i = 0; i < main_manfest.variants.length; i++) {
             var variant = main_manfest.variants[i];
-            var lastIndex = HLS_URI.lastIndexOf('/');
+            var HLS_URI_WO_QPS = HLS_URI.indexOf('?') > 0 ? HLS_URI.split('?')[0] : HLS_URI;
+            var lastIndex = HLS_URI_WO_QPS.lastIndexOf('/');
             const var_uri = HLS_URI.substr(0, lastIndex) + '/' + variant.uri;
             const var_res = await fetch(var_uri, OPTIONS);
             const child_manifest = await var_res.text();
             const sub_manfest = HLS.parse(child_manifest);
             for (j = 0; j < sub_manfest.segments.length; j++) {
                 var segment = sub_manfest.segments[j];
-                var seg_lastIndex = var_uri.lastIndexOf('/');
+                var VAR_URI_WO_QPS = var_uri.indexOf('?') > 0 ? var_uri.split('?')[0] : var_uri;
+                var seg_lastIndex = VAR_URI_WO_QPS.lastIndexOf('/');
                 const seg_uri = var_uri.substr(0, seg_lastIndex) + '/' + segment.uri;
                 process.stdout.write("Counting HLS segments : " + url_counter++ + "\r");
                 hls_urls.push(seg_uri);
