@@ -112,7 +112,10 @@ var get_hls_urls = async function () {
             var variant = main_manfest.variants[i];
             var HLS_URI_WO_QPS = HLS_URI.indexOf('?') > 0 ? HLS_URI.split('?')[0] : HLS_URI;
             var lastIndex = HLS_URI_WO_QPS.lastIndexOf('/');
-            const var_uri = HLS_URI.substr(0, lastIndex) + '/' + variant.uri;
+            var var_uri = HLS_URI.substr(0, lastIndex) + '/' + variant.uri;
+            if (variant.uri.indexOf('http') == 0) {
+                var_uri = variant.uri
+            }
             const var_res = await fetch(var_uri, OPTIONS);
             const child_manifest = await var_res.text();
             const sub_manfest = HLS.parse(child_manifest);
